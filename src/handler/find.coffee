@@ -4,6 +4,8 @@ Boom = require 'boom'
 
 resource_uri = require('./helpers').resource_uri
 ref2resource = require('./helpers').ref2resource
+omit_keys = require('./helpers').omit_keys
+rename_keys = require('./helpers').rename_keys
 
 
 module.exports = (Model, path, options) ->
@@ -31,12 +33,16 @@ module.exports = (Model, path, options) ->
       for model in models
         resource_uri model, path, options.resource_key
         ref2resource model, options.refs
+        omit_keys model, options.omit
+        rename_keys model, options.rename
 
       output = {}
       output.meta = {}
       output.meta.page_size = limit
 
       count = 0
+      if not skip? then skip = 0
+
       Model.count where, (err, count) ->
         if err then return res Boom.badImplementation err.message
         output.meta.total_count = count

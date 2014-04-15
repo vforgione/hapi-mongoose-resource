@@ -3,6 +3,7 @@ isArray = Array.isArray || ( value ) -> return {}.toString.call( value ) is '[ob
 
 
 module.exports = {
+
   ref2resource: (model, refs) ->
     for key, resource of refs
       if isArray model[key]
@@ -13,4 +14,14 @@ module.exports = {
 
   resource_uri: (model, path, resource_key) ->
     model._doc.resource_uri = path + '/' + model[resource_key]
+
+  omit_keys: (model, omit) ->
+    for key in omit
+      delete model._doc[key]
+
+  rename_keys: (model, rename) ->
+    for old_key, new_key of rename
+      model._doc[new_key] = model._doc[old_key]
+      delete model._doc[old_key]
+
 }

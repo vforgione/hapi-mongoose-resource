@@ -11,6 +11,8 @@ class Resource
     default_options = {
       resource_key: "_id"
       page_size: 20
+      omit: ['__v']
+      rename: { __t: 'type' }
     }
 
     # merge options -> overwrite default options with supplied options
