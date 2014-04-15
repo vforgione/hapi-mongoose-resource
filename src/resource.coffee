@@ -10,10 +10,8 @@ class Resource
   constructor: (@model, @path, options) ->
     default_options = {
       resource_key: "_id"
+      page_size: 20
     }
-
-    @schema = schema
-    @path = path
 
     # merge options -> overwrite default options with supplied options
     @options = {}
