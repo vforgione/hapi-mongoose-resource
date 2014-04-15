@@ -31,7 +31,166 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p>docs coming soon</p>
+        <h1>
+<a name="hapi-mongoose-resource-api" class="anchor" href="#hapi-mongoose-resource-api"><span class="octicon octicon-link"></span></a>hapi-mongoose-resource api</h1>
+
+<ul>
+<li><a href="#resource">resource</a></li>
+<li><a href="#router">router</a></li>
+<li><a href="#handler">handler</a></li>
+</ul><h2>
+<a name="resource" class="anchor" href="#resource"><span class="octicon octicon-link"></span></a>resource</h2>
+
+<p>a <code>resource</code> is an object that is used to generate routes and maintain handlers for a schema.</p>
+
+<h3>
+<a name="properties" class="anchor" href="#properties"><span class="octicon octicon-link"></span></a>properties</h3>
+
+<h4>
+<a name="model" class="anchor" href="#model"><span class="octicon octicon-link"></span></a>model</h4>
+
+<p>a model instance of a <code>mongoose.Schema</code> object passed to the constructor; the base of the resource.</p>
+
+<h4>
+<a name="path" class="anchor" href="#path"><span class="octicon octicon-link"></span></a>path</h4>
+
+<p>a string passed to the constructor that forms the base of the routes.</p>
+
+<h4>
+<a name="router" class="anchor" href="#router"><span class="octicon octicon-link"></span></a>router</h4>
+
+<p>an object that builds the routes mapping paths and verbs to handler methods.</p>
+
+<h4>
+<a name="handler" class="anchor" href="#handler"><span class="octicon octicon-link"></span></a>handler</h4>
+
+<p>an object that controls the database interactions for the given schema.</p>
+
+<h4>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>options</h4>
+
+<p>an object passed to the constructor that defines optional configuration parameters.</p>
+
+<h3>
+<a name="defaults" class="anchor" href="#defaults"><span class="octicon octicon-link"></span></a>defaults</h3>
+
+<h4>
+<a name="resource_uri" class="anchor" href="#resource_uri"><span class="octicon octicon-link"></span></a>resource_uri</h4>
+
+<p><em>this is not configurable - you cannot turn this off</em></p>
+
+<p>for every document returned, an additional property will be added to it with the key <code>resource_uri</code>.</p>
+
+<p>for many cases, you will be directly calling the object by it's id; however, when looking up items, it's helpful for the document to contain a self-referring uri that can be easily parsed and used for absolute linking.</p>
+
+<p>for example, if you have a <code>Widget</code> resource, and you called to <code>/widgets?weight:{"$lt":3}</code> via GET, you would receive something like this:</p>
+
+<pre><code>[
+  {
+    "name": "Widget Alpha",
+    "weight": 2.3,
+    "_id": "whatever-widget-alpha",
+    "resource_uri": "/widgets/whatever-widget-alpha"
+  },
+  {
+    "name": "Widget Beta",
+    "weight": 1.9,
+    "_id": "whatever-widget-beta",
+    "resource_uri": "/widgets/whatever-widget-beta"
+  },
+  {
+    "name": "Widget Gamma",
+    "weight": 2.8,
+    "_id": "whatever-widget-gamma",
+    "resource_uri": "/widgets/whatever-widget-gamma"
+  }
+]
+</code></pre>
+
+<p>thus making it easier for a front-end application to link directly to the resources.</p>
+
+<h4>
+<a name="resource_key" class="anchor" href="#resource_key"><span class="octicon octicon-link"></span></a>resource_key</h4>
+
+<p><code>_id</code> property of the schema. it's used to contract paths.</p>
+
+<h3>
+<a name="optional-configuration-options" class="anchor" href="#optional-configuration-options"><span class="octicon octicon-link"></span></a>optional configuration options</h3>
+
+<h4>
+<a name="refs" class="anchor" href="#refs"><span class="octicon octicon-link"></span></a>refs</h4>
+
+<p>an object mapping schema properties to other resources.</p>
+
+<p>for example, if you had the following schemas/models/resources:</p>
+
+<pre><code>mongoose = require 'mongoose'
+Resource = require 'hapi-mongoose-resource'
+
+ComponentSchema = new mongoose.Schema { name: String }
+Component = mongoose.model 'Component', ComponentSchema
+ComponentResource = new Resource Component, '/components'
+
+ProductSchema = new mongoose.Schema { name: String, components: [{ type: mongoose.Schema.Types.ObjectId, ref: Component }]
+Product = mongoose.model 'Product', ProductSchema
+ProductResource = new Resource Product, '/products', { refs: { components: ComponentResource } }
+</code></pre>
+
+<p>and made a GET requests to <code>whatever.com/products</code>, your response objects would look like:</p>
+
+<pre><code>{
+  "name": "Some Finished Product",
+  "components": [
+    "/components/&lt;ObjectId&gt;",
+    "/components/&lt;ObjectId&gt;",
+    "/components/&lt;ObjectId&gt;",
+    "/components/&lt;ObjectId&gt;"
+  ]
+}
+</code></pre>
+
+<p>where <code>&lt;ObjectId&gt;</code> is replaced by the actual object ids of the components that were named when you created the product. this may not seem like much, but it could save a lot of work on front-end applications and minimize the chance of pushing broken links to related/referenced objects.</p>
+
+<h2>
+<a name="router-1" class="anchor" href="#router-1"><span class="octicon octicon-link"></span></a>router</h2>
+
+<p>a <code>router</code> is an internal object of a <code>resource</code>. it is used to build routing paths for a hapi server instance.</p>
+
+<h3>
+<a name="properties-1" class="anchor" href="#properties-1"><span class="octicon octicon-link"></span></a>properties</h3>
+
+<h4>
+<a name="routes" class="anchor" href="#routes"><span class="octicon octicon-link"></span></a>routes</h4>
+
+<p>an array of objects that meet the specs for hapi server routing.</p>
+
+<h4>
+<a name="handler-1" class="anchor" href="#handler-1"><span class="octicon octicon-link"></span></a>handler</h4>
+
+<p>an instance of a <code>resource.handler</code> object passed to the constructor. it's methods are mapped to the paths.</p>
+
+<h4>
+<a name="path-1" class="anchor" href="#path-1"><span class="octicon octicon-link"></span></a>path</h4>
+
+<p>a string passed to the constructor. it is the base path used for routing.</p>
+
+<h4>
+<a name="options-1" class="anchor" href="#options-1"><span class="octicon octicon-link"></span></a>options</h4>
+
+<p>an object passed to the constructor that defines optional configuration parameters.</p>
+
+<h3>
+<a name="defaults-1" class="anchor" href="#defaults-1"><span class="octicon octicon-link"></span></a>defaults</h3>
+
+<h4>
+<a name="routes-1" class="anchor" href="#routes-1"><span class="octicon octicon-link"></span></a>routes</h4>
+
+<p>routes by default map to the standard CRUD verbs: <code>GET</code>, <code>CREATE</code>, <code>UPDATE</code>, and <code>DELETE</code>. <code>GET</code> is special in the sense that it can fetch either a single resource or a collection of resources.</p>
+
+<p>the other verbs must be called with an identifying parameter in their uri -- most typically the <code>_id</code> field of the model/document.</p>
+
+<h2>
+<a name="handler-2" class="anchor" href="#handler-2"><span class="octicon octicon-link"></span></a>handler</h2>
       </section>
     </div>
 
