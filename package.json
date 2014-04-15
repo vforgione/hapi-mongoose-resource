@@ -1,7 +1,7 @@
 {
   "name": "hapi-mongoose-resource",
   "description": "resourceful mongoose objects for the hapi framework",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "keywords": [
     "hapi",
     "mongoose",
