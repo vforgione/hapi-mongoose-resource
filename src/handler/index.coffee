@@ -1,22 +1,22 @@
 
 class Handler
 
-  constructor: (@schema, @path, @options) ->
+  constructor: (@model, @path, @options) ->
 
   find: ->
-    return require('./find')(@schema, @path, @options)
+    return require('./find')(@model, @path, @options)
 
   find_one: ->
-    return require('./find_one')(@schema, @path, @options)
+    return require('./find_one')(@model, @path, @options)
 
   create: ->
-    return require('./create')(@schema, @path, @options)
+    return require('./create')(@model, @path, @options)
 
   update: ->
-    return require('./update')(@schema, @path, @options)
+    return require('./update')(@model, @path, @options)
 
   destroy: ->
-    return require('./destroy')(@schema, @path, @options)
+    return require('./destroy')(@model, @path, @options)
 
 
 module.exports = Handler
