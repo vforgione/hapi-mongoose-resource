@@ -1,0 +1,41 @@
+{
+  "name": "hapi-mongoose-resource",
+  "description": "resourceful mongoose objects for the hapi framework",
+  "version": "0.0.1",
+
+  "keywords": [
+    "hapi", "mongoose", "resource", "hapi resource", "mongoose resource"
+  ],
+  "homepage": "http://vforgione.github.io/hapi-mongoose-resource ",
+  "bugs": "https://github.com/vforgione/hapi-mongoose-resource/issues",
+
+  "author": "Vince Forgione <v.forgione@gmail.com>",
+  "license": "MIT",
+
+  "main": "./lib/index.js",
+
+  "engines": {
+    "node": ">=-.10.0"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vforgione/hapi-mongoose-resource"
+  },
+
+  "dependencies": {
+    "coffee-script": "*",
+    "mongoose": "*",
+    "lodash": "*",
+    "boom": "*"
+  },
+  "devDependencies": {
+    "hapi": "*",
+    "mocha": "1.8.2",
+    "should": "3.2.0"
+  },
+
+  "scripts": {
+    "test": "make test"
+  }
+}
