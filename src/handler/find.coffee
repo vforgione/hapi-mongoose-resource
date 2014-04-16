@@ -23,9 +23,7 @@ module.exports = (Model, path, options) ->
 
     where = _.transform query , (conditions, value, key) ->
       if key not in ['limit', 'skip', 'sort']
-        val = JSON.parse value
-        if _.isObject val then conditions[key] = val
-        else conditions[key] = value
+        conditions[key] = value
 
     Model.find(where).sort(sort).skip(skip).limit(limit).exec (err, models) ->
       if err then return res Boom.badImplementation err.message
