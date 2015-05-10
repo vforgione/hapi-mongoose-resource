@@ -1,8 +1,3 @@
-# not under active development
-
-I am no longer actively developing this project. If anyone finds it useful, go ahead an fork it or email me and I'll transfer it over.
-
-
 # hapi-mongoose-resource
 > resourceful mongoose objects for the hapi framework
 
